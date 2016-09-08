@@ -4,7 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 const getWebpackTestConfig = function(projectRoot, appConfig) {
-  
+
   const appRoot = path.resolve(projectRoot, appConfig.root);
 
   return {
@@ -64,7 +64,8 @@ const getWebpackTestConfig = function(projectRoot, appConfig) {
         { test: /\.less$/, loaders: ['raw-loader', 'postcss-loader', 'less-loader'] },
         { test: /\.scss$|\.sass$/, loaders: ['raw-loader', 'postcss-loader', 'sass-loader'] },
         { test: /\.(jpg|png)$/, loader: 'url-loader?limit=128000' },
-        { test: /\.html$/, loader: 'raw-loader', exclude: [path.resolve(appRoot, appConfig.index)] }
+        { test: /\.html$/, loader: 'raw-loader', exclude: [path.resolve(appRoot, appConfig.index)] },
+        { test: /\.(jade|pug)$/, loaders: ['pug-html-loader']},
       ],
       postLoaders: [
         {
