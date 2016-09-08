@@ -136,6 +136,8 @@
     "mocha": "^2.4.5",
     "mock-fs": "3.10.0",
     "object-assign": "^4.0.1",
+    "pug": "^2.0.0-beta3",
+    "pug-loader": "^2.3.0",
     "rewire": "^2.5.1",
     "sinon": "^1.17.3",
     "through": "^2.3.8",

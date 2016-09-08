@@ -116,7 +116,7 @@ export function getWebpackCommonConfig(
         { test: /\.json$/, loader: 'json-loader' },
         { test: /\.(jpg|png)$/, loader: 'url-loader?limit=10000' },
         { test: /\.html$/, loader: 'raw-loader' },
-
+        { test: /\.(jade|pug)$/, loaders: ['pug-html-loader']},
         { test: /\.(woff|ttf|svg)$/, loader: 'url?limit=10000' },
         { test: /\.woff2$/, loader: 'url?limit=10000&mimetype=font/woff2' },
         { test: /\.eot$/, loader: 'file' }
