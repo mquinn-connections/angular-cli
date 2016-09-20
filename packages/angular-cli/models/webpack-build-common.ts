@@ -114,7 +114,7 @@ export function getWebpackCommonConfig(
         { include: scripts, test: /\.js$/, loader: 'script-loader' },
 
         { test: /\.json$/, loader: 'json-loader' },
-        { test: /\.(jpg|png|gif)$/, loader: 'url-loader?limit=10000' },
+        { test: /\.(jpg|png|gif)$/, loader: 'url-loader' },
         { test: /\.html$/, loader: 'raw-loader' },
         { test: /\.(jade|pug)$/, loaders: ['pug-html-loader?doctype=html']},
         { test: /\.(otf|woff|ttf|svg)$/, loader: 'url' },
