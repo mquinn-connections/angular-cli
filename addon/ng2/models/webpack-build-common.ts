@@ -116,7 +116,7 @@ export function getWebpackCommonConfig(
         { test: /\.json$/, loader: 'json-loader' },
         { test: /\.(jpg|png)$/, loader: 'url-loader' },
         { test: /\.html$/, loader: 'raw-loader' },
-        { test: /\.(jade|pug)$/, loaders: ['pug-html-loader']},
+        { test: /\.(jade|pug)$/, loaders: ['pug-html-loader?doctype=html']},
         { test: /\.(woff|ttf|svg)$/, loader: 'url' },
         { test: /\.woff2$/, loader: 'url?mimetype=font/woff2' },
         { test: /\.eot$/, loader: 'url' }
