@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "start": "ng serve",
+    "start": "gulp && ng serve",
     "lint": "tslint \"<%= sourceDir %>/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",
@@ -46,6 +46,20 @@
     "protractor": "4.0.5",
     "ts-node": "1.2.1",
     "tslint": "3.13.0",
-    "typescript": "2.0.2"
+    "typescript": "2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-pug": "^3.0.4",
+    "gulp-less": "^3.0.5",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-cached": "^1.1.0",
+    "gulp-postcss": "^6.2.0",
+    "gulp-shell": "^0.5.1",
+    "gulp-replace": "^0.5.4",
+    "postcss-assets": "^4.1.0",
+    "autoprefixer": "^6.4.1",
+    "run-sequence": "^1.1.5",
+    "del": "^2.2.0",
+    "yargs": "^4.7.1",
+    "gulp-rename": "^1.2.2",
   }
 }
