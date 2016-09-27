@@ -1,3 +1,24 @@
+## CE-Angular-CLI
+
+This is the Connections Education Angular-CLI fork. The intention of this fork is to provide an angular 
+cli setup specific for Connections Educations needs. This fork will also provide specific things missing
+from the current version of the CLI that CE requires and that might not be useful to include as a PR 
+in the google version of the angular-cli project.
+
+CE-Angular-CLI includes the following:
+
+- AOT (Ahead of Time) compilation w/tree shaking.
+- Jade/Pug templating.
+- Inlining of Assets (Images, Fonts, etc)
+- Autoprefixing of Less/Css
+- (ComingSoon) Documentation Generation via (ESDoc or TSDoc)
+- (ComingSoon) Styleguide Generation via (SC5Styleguide)
+- (ComingSoon) CSS Regression Testing via (BackstopJS)
+- (ComingSoon) CE Versioning & Deployment Hooks
+
+This fork will be continuously updated with the latest Angular-CLI changes and when/if Angular-CLI implements 
+any of these features directly we will remove our implementations of said features.
+
 ## Angular-CLI
 
 [![Join the chat at https://gitter.im/angular/angular-cli](https://badges.gitter.im/angular/angular-cli.svg)](https://gitter.im/angular/angular-cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -122,6 +143,15 @@ ng build
 ```
 
 The build artifacts will be stored in the `dist/` directory.
+
+### CE Build Targets
+
+Connections Education uses gulp as a wrapper around the angular-cli build process. This is due to the fact that the cli
+does not yet have support for AOT compilation. 
+
+The two different builds are jit (just in time) and (ahead of time) compilation.
+
+`gulp aot` or `gulp jit` can be used in combination with `--prod` or `--dev`
 
 ### Build Targets and Environment Files
 
@@ -386,6 +416,8 @@ This project is currently a prototype so there are many known issues. Just to me
 - The initial installation as well as `ng new` take too long because of lots of npm dependencies.
 - Many existing ember addons are not compatible with Angular apps built via angular-cli.
 - When you `ng serve` remember that the generated project has dependencies that require **Node 4 or greater**.
+- CE Only: If you have previously ran `gulp aot`, you will need to rerun `gulp jit` before running `ng serve`, or copy over the jit.angular-cli.json to the angular-cli.json.
+
 
 
 ## Development Hints for hacking on angular-cli

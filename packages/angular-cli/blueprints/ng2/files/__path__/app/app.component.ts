@@ -10,7 +10,7 @@ import { APP_SHELL_DIRECTIVES } from '@angular/app-shell';<% } %>
   `,
   styles: [],
   directives: [APP_SHELL_DIRECTIVES]<% } else { %>templateUrl: './app.component.pug',
-  styleUrls: ['./app.component.less']
+  styleUrls: ['./app.component.less']<% } %>
 })
 export class AppComponent {
   title = 'app works!';

@@ -11,10 +11,16 @@
     "pretty": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitReturns": false,
     "noImplicitUseStrict": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ]
   },
   "angularCompilerOptions": {
     "genDir": "./",
@@ -22,7 +28,7 @@
   },
   "compileOnSave": false,
   "files": [
-    "./dist/aot-tmp/app/app.module.ts"
+    "./app/app.module.ts"
   ],
   "exclude": [
     "node_modules",

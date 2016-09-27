@@ -15,6 +15,8 @@ var gulp            = require('gulp'),
     argv            = require('yargs').argv,
     rename = require('gulp-rename');
 
+var args = (argv.prod) ? '--prod': '--dev';
+
 global.paths = {
   'all':    './src/**/*',
   'app':    './src/app/',
@@ -48,6 +50,12 @@ gulp.task('ts:replace', function() {
     .pipe(gulp.dest(global.paths.tmp));
 });
 
+gulp.task('typesRoot:replace', function() {
+  return gulp.src(global.paths.tmp + '/tsconfig.json')
+    .pipe(replace('../node_modules/', '../../node_modules/'))
+    .pipe(gulp.dest(global.paths.tmp));
+});
+
 gulp.task('transpile:less', function(){
   var processors = [
     autoprefixer({browsers: ['last 1 version']}),
@@ -76,23 +84,20 @@ gulp.task('clean', function (done) {
   });
 });
 
-gulp.task('run:ngc', function(){
-  return shell.task(['./node_modules/.bin/ngc -p ./dist/aot-tmp/aot.tsconfig.json']);
-});
+gulp.task('run:ngc', shell.task([
+  '"./node_modules/.bin/ngc" -p dist/aot-tmp/aot.tsconfig.json'
+]));
 
-gulp.task('run:ng:aot', function(){
-  var args = (argv.prod) ? '--prod': '--dev';
-  return shell.task(['ng build -o ./dist/aot ' + args]);
-});
+gulp.task('run:ng:aot', shell.task([
+  'ng build -o ./dist/aot ' + args
+]));
 
-gulp.task('run:ng:jit', function(){
-  var args = (argv.prod) ? '--prod': '--dev';
-  console.log(args);
-  return shell.task(['ng build -o ./dist/jit ' + args]);
-});
+gulp.task('run:ng:jit', shell.task([
+  'ng build -o ./dist/jit ' + args
+]));
 
 gulp.task('aot', function(callback){
-  runSequence('copy:config:aot', 'copy', 'ts:replace', 'transpile:less', 'transpile:pug', 'run:ngc', 'run:ng:aot', callback);
+  runSequence('copy:config:aot', 'copy', 'ts:replace', 'transpile:less', 'transpile:pug', 'run:ngc', 'typesRoot:replace', 'run:ng:aot', 'clean', callback);
 });
 
 gulp.task('jit', function(callback){
