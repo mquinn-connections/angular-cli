@@ -5,11 +5,11 @@
   },
   "apps": [
     {
-      "root": "<%= sourceDir %>",
-      "outDir": "dist/jit/",
+      "root": "dist/aot-tmp/",
+      "outDir": "../aot/",
       "assets": "assets",
       "index": "index.html",
-      "main": "main.ts",
+      "main": "aot.main.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.json",
       "prefix": "<%= prefix %>",

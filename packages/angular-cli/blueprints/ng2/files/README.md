@@ -1,9 +1,11 @@
 # <%= jsComponentName %>
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version <%= version %>.
+This project was generated with [ce-angular-cli](https://github.com/mquinn-connections/angular-cli.git) or [ce-angular-cli](https://github.com/jpf200124/angular-cli.git) version <%= version %>.
 
 ## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server (using jit compiliation). Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+Note: If you have previously ran `gulp aot`, you will need to rerun `gulp jit` before running `ng serve`, or copy over the jit.angular-cli.json to the angular-cli.json.
 
 ## Code scaffolding
 
@@ -11,7 +13,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Run `gulp jit` to build the jit(Just in Time) version of the project or `gulp aot` to build aot(Ahead of Time) version of the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
 ## Running unit tests
 
