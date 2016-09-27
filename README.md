@@ -11,9 +11,10 @@ CE-Angular-CLI includes the following:
 - Jade/Pug templating.
 - Inlining of Assets (Images, Fonts, etc)
 - Autoprefixing of Less/Css
-- (ComingSoon) Documentation Generation via (ESDoc or TSDoc)
-- (ComingSoon) Styleguide Generation via (SC5Styleguide)
-- (ComingSoon) CSS Regression Testing via (BackstopJS)
+- Documentation Generation via TypeDoc
+- Styleguide Generation via SC5Styleguide
+- CSS Regression Testing via BackstopJS
+- Karma & Protractor Testing Reports via html, junit, and spec reporters
 - (ComingSoon) CE Versioning & Deployment Hooks
 
 This fork will be continuously updated with the latest Angular-CLI changes and when/if Angular-CLI implements 

@@ -1,0 +1,37 @@
+{
+  "viewports": [
+    {
+      "name": "tablet_h",
+      "width": 1024,
+      "height": 768
+    }
+  ],
+  "scenarios": [
+    {
+      "label": "http://localhost:4200",
+      "url": "http://localhost:4200",
+      "hideSelectors": [],
+      "removeSelectors": [
+      ],
+      "selectors": [
+        "app-root",
+        "body"
+      ],
+      "readyEvent": null,
+      "delay": 500,
+      "misMatchThreshold" : 0.1,
+      "onReadyScript": "scenario1.js",
+      "onBeforeScript": null
+    }
+  ],
+  "paths": {
+    "bitmaps_reference": "../../backstop/reference",
+    "bitmaps_test": "../../dist/test_results/backstop/",
+    "compare_data": "../../dist/test_results/backstop/compare.json",
+    "casper_scripts": "../../backstop/"
+  },
+  "engine": "phantomjs",
+  "report": ["CLI", "browser"],
+  "cliExitOnFail": false,
+  "debug": false
+}

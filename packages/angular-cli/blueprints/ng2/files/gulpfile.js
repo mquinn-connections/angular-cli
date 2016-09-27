@@ -13,7 +13,10 @@ var gulp            = require('gulp'),
     runSequence     = require('run-sequence'),
     del             = require('del'),
     argv            = require('yargs').argv,
-    rename = require('gulp-rename');
+    rename          = require('gulp-rename'),
+    styleguide      = require('sc5-styleguide'),
+    typedoc         = require("gulp-typedoc");
+
 
 var args = (argv.prod) ? '--prod': '--dev';
 
@@ -23,8 +26,68 @@ global.paths = {
   'tmp':    './dist/aot-tmp',
   'ts':     './src/app/**/!(*spec).ts',
   'less':   './src/app/**/*.less',
-  'pug':    './src/app/**/*.pug'
+  'pug':    './src/app/**/*.pug',
+  'docs':   './dist/docs/'
 };
+
+var styleguideOutputPath = global.paths.docs + 'styleguide/';
+var typedocOutputPath = global.paths.docs + 'typedoc/';
+
+gulp.task('styleguide:generate', function() {
+  return gulp.src(global.paths.less)
+    .pipe(styleguide.generate({
+      title: 'ng2 Dock Living Styleguide',
+      server: false,
+      rootPath: styleguideOutputPath,
+      overviewPath: 'README.md',
+      enabledJade: true
+    }))
+    .pipe(gulp.dest(styleguideOutputPath));
+});
+
+gulp.task('styleguide:applystyles', function() {
+  return gulp.src(global.paths.less)
+    .pipe(less({
+      errLogToConsole: true
+    }))
+    .pipe(styleguide.applyStyles())
+    .pipe(gulp.dest(styleguideOutputPath));
+});
+
+gulp.task('styleguide', ['styleguide:generate', 'styleguide:applystyles']);
+
+gulp.task('typedoc', function() {
+  return gulp.src(global.paths.ts)
+    .pipe(typedoc({
+      // TypeScript options (see typescript docs)
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "noImplicitAny": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "isolatedModules": true,
+      "excludeExternals": true,
+
+      // Output options (see typedoc docs)
+      out: typedocOutputPath,
+      json: typedocOutputPath + '/typedoc.json',
+
+      // TypeDoc options (see typedoc docs)
+      name: "MyAngular2App Documentation",
+      ignoreCompilerErrors: true,
+      version: true
+    }))
+});
+
+gulp.task('backstop:generateRef', shell.task(
+  ['npm run reference'], {cwd: './node_modules/backstopjs/'}
+));
+
+gulp.task('backstop', shell.task(
+  ['npm run test'], {cwd: './node_modules/backstopjs/'}
+));
 
 gulp.task('copy', function() {
   return gulp.src(global.paths.all)
@@ -103,5 +166,7 @@ gulp.task('aot', function(callback){
 gulp.task('jit', function(callback){
   runSequence('copy:config:jit', 'run:ng:jit', callback);
 });
+
+gulp.task('docs', ['styleguide', 'typedoc']);
 
 gulp.task('default', ['jit']);
