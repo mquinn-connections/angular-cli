@@ -3,6 +3,8 @@
 
 /*global jasmine */
 var SpecReporter = require('jasmine-spec-reporter');
+var Jasmine2HtmlReporter = require('protractor-jasmine2-html-reporter');
+var jasmineReporters = require('jasmine-reporters');
 
 exports.config = {
   allScriptsTimeout: 11000,
@@ -16,8 +18,11 @@ exports.config = {
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {
+    showTiming: true,
+    isVerbose: false,
     showColors: true,
-    defaultTimeoutInterval: 30000,
+    includeStackTrace: false,
+    defaultTimeoutInterval: 400000,
     print: function() {}
   },
   useAllAngular2AppRoots: true,
@@ -27,6 +32,23 @@ exports.config = {
     });
   },
   onPrepare: function() {
-    jasmine.getEnv().addReporter(new SpecReporter());
+    browser.manage().timeouts().pageLoadTimeout(120000);
+    browser.manage().timeouts().implicitlyWait(60000);
+    browser.ignoreSynchronization = true;
+
+    var junitReporter = new jasmineReporters.JUnitXmlReporter({
+      savePath: './dist/test_results/e2e/',
+      consolidateAll: true
+    });
+    jasmine.getEnv().addReporter(junitReporter);
+    jasmine.getEnv().addReporter(
+      new Jasmine2HtmlReporter({
+        savePath: './dist/test_results/e2e/'
+      })
+    );
+    jasmine.getEnv().addReporter(new SpecReporter({
+      displayStacktrace: 'none',    // display stacktrace for each failed assertion, values: (all|specs|summary|none)
+      displayFailuresSummary: true // display summary of all failures after execution
+    }));
   }
 };

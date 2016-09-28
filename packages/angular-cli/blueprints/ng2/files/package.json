@@ -43,7 +43,10 @@
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-remap-istanbul": "^0.2.1",
-    "protractor": "4.0.5",
+    "karma-htmlfile-reporter": "^0.3.4",
+    "karma-junit-reporter": "^1.1.0",
+    "karma-spec-reporter": "0.0.26",
+    "protractor": "4.0.9",
     "ts-node": "1.2.1",
     "tslint": "3.13.0",
     "typescript": "2.0.2",
@@ -61,6 +64,12 @@
     "del": "^2.2.0",
     "yargs": "^4.7.1",
     "gulp-rename": "^1.2.2",
-    "@types/node": "^6.0.41"
+    "@types/node": "^6.0.41",
+    "backstopjs": "^1.0.0",
+    "sc5-styleguide": "^0.3.41",
+    "gulp-typedoc": "^1.2.1",
+    "jasmine-reporters": "^2.1.1",
+    "jasmine-spec-reporter": "^2.5.0",
+    "protractor-jasmine2-html-reporter": "0.0.6"
   }
 }
