@@ -15,7 +15,7 @@ CE-Angular-CLI includes the following:
 - Styleguide Generation via SC5Styleguide
 - CSS Regression Testing via BackstopJS
 - Karma & Protractor Testing Reports via html, junit, and spec reporters
-- (ComingSoon) CE Versioning & Deployment Hooks
+- CE Versioning & Deployment Hooks
 
 This fork will be continuously updated with the latest Angular-CLI changes and when/if Angular-CLI implements 
 any of these features directly we will remove our implementations of said features.
