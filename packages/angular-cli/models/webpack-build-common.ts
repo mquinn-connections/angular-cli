@@ -1,13 +1,9 @@
+import * as webpack from 'webpack';
 import * as path from 'path';
+import {BaseHrefWebpackPlugin} from '@angular-cli/base-href-webpack';
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-import * as webpack from 'webpack';
-const atl = require('awesome-typescript-loader');
-const autoprefixer = require('autoprefixer');
-const postcssAssets = require('postcss-assets');
-
-import { BaseHrefWebpackPlugin } from '@angular-cli/base-href-webpack';
-import { findLazyModules } from './find-lazy-modules';
 
 
 export function getWebpackCommonConfig(
@@ -20,12 +16,11 @@ export function getWebpackCommonConfig(
   const appRoot = path.resolve(projectRoot, appConfig.root);
   const appMain = path.resolve(appRoot, appConfig.main);
   const styles = appConfig.styles
-    ? appConfig.styles.map((style: string) => path.resolve(appRoot, style))
-    : [];
+               ? appConfig.styles.map((style: string) => path.resolve(appRoot, style))
+               : [];
   const scripts = appConfig.scripts
-    ? appConfig.scripts.map((script: string) => path.resolve(appRoot, script))
-    : [];
-  const lazyModules = findLazyModules(appRoot);
+                ? appConfig.scripts.map((script: string) => path.resolve(appRoot, script))
+                : [];
 
   let entry: { [key: string]: string[] } = {
     main: [appMain]
@@ -38,44 +33,26 @@ export function getWebpackCommonConfig(
   return {
     devtool: 'source-map',
     resolve: {
-      extensions: ['', '.ts', '.js'],
-      root: appRoot
+      extensions: ['.ts', '.js']
     },
     context: path.resolve(__dirname, './'),
     entry: entry,
     output: {
       path: path.resolve(projectRoot, appConfig.outDir),
-      filename: '[name].bundle.js',
+      filename: '[name].bundle.js'
     },
     module: {
-      preLoaders: [
+      rules: [
         {
+          enforce: 'pre',
           test: /\.js$/,
           loader: 'source-map-loader',
           exclude: [
             /node_modules/
           ]
-        }
-      ],
-      loaders: [
-        {
-          test: /\.ts$/,
-          loaders: [
-            {
-              loader: 'awesome-typescript-loader',
-              query: {
-                useForkChecker: true,
-                tsconfig: path.resolve(appRoot, appConfig.tsconfig)
-              }
-            }, {
-              loader: 'angular2-template-loader'
-            }
-          ],
-          exclude: [/\.(spec|e2e)\.ts$/]
         },
-
         // in main, load css as raw text
-        {
+        {
           exclude: styles,
           test: /\.css$/,
           loaders: ['raw-loader', 'postcss-loader']
@@ -83,7 +60,7 @@ export function getWebpackCommonConfig(
           exclude: styles,
           test: /\.styl$/,
           loaders: ['raw-loader', 'postcss-loader', 'stylus-loader'] },
-        {
+        {
           exclude: styles,
           test: /\.less$/,
           loaders: ['raw-loader', 'postcss-loader', 'less-loader']
@@ -94,7 +71,7 @@ export function getWebpackCommonConfig(
         },
 
         // outside of main, load it via style-loader
-        {
+        {
           include: styles,
           test: /\.css$/,
           loaders: ['style-loader', 'css-loader', 'postcss-loader']
@@ -115,15 +92,16 @@ export function getWebpackCommonConfig(
         // load global scripts using script-loader
         { include: scripts, test: /\.js$/, loader: 'script-loader' },
 
-        // CE - Custom
-        { test: /\.(jade|pug)$/, loaders: ['pug-html-loader?doctype=html']},
-        { test: /\.json$/, loader: 'json-loader' },
-        { test: /\.html$/, loader: 'raw-loader' }
-      ],
+        { test: /\.json$/, loader: 'json-loader' },
+        { test: /\.(jpg|png|gif)$/, loader: 'url-loader?limit=10000' },
+        { test: /\.html$/, loader: 'html-loader' },
+
+        { test: /\.(otf|woff|ttf|svg)$/, loader: 'url?limit=10000' },
+        { test: /\.woff2$/, loader: 'url?limit=10000&mimetype=font/woff2' },
+        { test: /\.eot$/, loader: 'file' }
+      ]
     },
     plugins: [
-      new webpack.ContextReplacementPlugin(/.*/, appRoot, lazyModules),
-      new atl.ForkCheckerPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(appRoot, appConfig.index),
         chunksSortMode: 'dependency'
@@ -156,12 +134,9 @@ export function getWebpackCommonConfig(
         to: path.resolve(projectRoot, appConfig.outDir, appConfig.assets)
       }])
     ],
-    postcss: function () {
-      return [autoprefixer, postcssAssets];
-    },
     node: {
       fs: 'empty',
-      global: 'window',
+      global: true,
       crypto: 'empty',
       module: false,
       clearImmediate: false,
