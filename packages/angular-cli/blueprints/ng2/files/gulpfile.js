@@ -224,40 +224,29 @@ gulp.task('lib:bundle:umd', function() {
       entry: './dist/lib/src/index.js',
       format: 'umd',
       treeshake: true,
-      dest: 'myapp.bundle.js',
-      moduleName: 'myapp',
-      banner: '/* CE (Connections Education) MyApp Angular2 Library */',
+      dest: 'ce-<%= htmlComponentName %>.bundle.js',
+      moduleName: '<%= htmlComponentName %>',
+      banner: '/* Connections Education ce-<%= htmlComponentName %> Angular2 Library */',
       useStrict: true
     }))
     .pipe(sourcemaps.write())
-    .pipe(rename('myapp.bundle.umd.js'))
+    .pipe(rename('ce-<%= htmlComponentName %>.bundle.umd.js'))
     .pipe(gulp.dest('./dist/lib/bundles'));
 });
 
 gulp.task('lib:bundle:umd:min', function() {
-  return gulp.src('./dist/lib/bundles/myapp.bundle.umd.js')
+  return gulp.src('./dist/lib/bundles/ce-<%= htmlComponentName %>.bundle.umd.js')
     .pipe(uglify({
       mangle: true,
       preserveComments: 'license'
     }))
-    .pipe(rename('myapp.bundle.umd.min.js'))
+    .pipe(rename('ce-<%= htmlComponentName %>.bundle.umd.min.js'))
     .pipe(gulp.dest('./dist/lib/bundles/'));
 });
 
 /**************************************************************************
  *    NPM Publish
  *************************************************************************/
-
-gulp.task('publish:zip', function() {
-  return gulp.src([
-    global.paths.dist + '/app/**',
-    global.paths.dist + '/lib/**',
-    global.paths.dist + '/package.json',
-    global.paths.dist + '/README.md'
-  ],{base: 'dist/'})
-    .pipe(zip('ce-myapp.zip'))
-    .pipe(gulp.dest(global.paths.dist));
-});
 
 gulp.task('publish:copy:tmp', function() {
   return gulp.src([
@@ -266,14 +255,14 @@ gulp.task('publish:copy:tmp', function() {
     global.paths.dist + '/package.json',
     global.paths.dist + '/README.md'
   ],{base: 'dist/'})
-    .pipe(gulp.dest(global.paths.dist + '/ce-myapp'));
+    .pipe(gulp.dest(global.paths.dist + '/ce-<%= htmlComponentName %>'));
 });
 
 gulp.task('publish:tarball', function() {
   return gulp.src([
-    global.paths.dist + '/ce-myapp/**'
+    global.paths.dist + '/ce-<%= htmlComponentName %>/**'
   ],{base: 'dist/'})
-    .pipe(tar('ce-myapp.tar'))
+    .pipe(tar('ce-<%= htmlComponentName %>.tar'))
     .pipe(gzip())
     .pipe(gulp.dest(global.paths.dist));
 });
@@ -294,20 +283,40 @@ gulp.task('publish:createPackageJson', function() {
 });
 
 gulp.task('publish:npm', shell.task([
-  'npm publish ./dist/ce-myapp.tar.gz'
+  'npm publish ./dist/ce-<%= htmlComponentName %>.tar.gz'
 ]));
+
+gulp.task('publish:clean', function (done) {
+  del([
+    global.paths.dist + '/ce-<%= htmlComponentName %>',
+    global.paths.dist + '/ce-<%= htmlComponentName %>.tar.gz'
+  ]).then(function() {
+    done()
+  });
+});
 
 /**************************************************************************
  *    CE - Deployment
  *************************************************************************/
 
+gulp.task('deploy:zip', function() {
+  return gulp.src([
+    global.paths.dist + '/app/**',
+    global.paths.dist + '/lib/**',
+    global.paths.dist + '/package.json',
+    global.paths.dist + '/README.md'
+  ],{base: 'dist/'})
+    .pipe(zip('ce-<%= htmlComponentName %>.zip'))
+    .pipe(gulp.dest(global.paths.dist));
+});
+
 gulp.task('deploy:nest', function(){
-  return gulp.src(global.paths.dist + '/ce-myapp.zip')
+  return gulp.src(global.paths.dist + '/ce-<%= htmlComponentName %>.zip')
     .pipe(scp({
       host: deployHost,
       username: deployHostPassword,
       password: deployHostUsername,
-      dest: '/opt/connections/Nest/' + deployEnvironment + '/public/libraries/ce-myapp/ce-myapp.zip'
+      dest: '/opt/connections/Nest/' + deployEnvironment + '/public/libraries/ce-<%= htmlComponentName %>/ce-<%= htmlComponentName %>.zip'
     }))
     .on('error', function(err) {
       console.log(err);
@@ -327,6 +336,14 @@ gulp.task('run:nest:deploy:end', shell.task([
   'curl -H "Content-Type: application/json" -d "{"type": "' + deployPlanType + '", "version": "' + version + '", "buildKey": "' + deployPlanKey + '", "buildNumber": "' + deployBuildNumber + '", "environment": "' + deployEnvironment + '", "step": "end"}" https://' +  deployHost + '/api/tool/deploy/8c285561-bf16-4ff2-8754-aa7877c4d3c2 -k'
 ]));
 
+gulp.task('deploy:clean', function (done) {
+  del([
+    global.paths.dist + '/ce-<%= htmlComponentName %>.zip'
+  ]).then(function() {
+    done()
+  });
+});
+
 /**************************************************************************
  *    Build Wrappers
  *************************************************************************/
@@ -336,11 +353,11 @@ gulp.task('run:ngc', shell.task([
 ]));
 
 gulp.task('run:ng:aot', shell.task([
-  'ng build -o ./dist/app/aot ' + devOrProd
+  'ng build -o ./dist/app/aot --prod'
 ]));
 
 gulp.task('run:ng:jit', shell.task([
-  'ng build -o ./dist/app/jit ' + devOrProd
+  'ng build -o ./dist/app/jit --prod'
 ]));
 
 /**************************************************************************
@@ -367,11 +384,11 @@ gulp.task('libs', function(callback){
 });
 
 gulp.task('publish', function(callback){
-  runSequence('publish:createPackageJson', 'publish:copy:tmp', 'publish:zip', 'publish:tarball', 'publish:npm', callback);
+  runSequence('publish:createPackageJson', 'publish:copy:tmp', 'publish:tarball', 'publish:npm', 'publish:clean', callback);
 });
 
 gulp.task('deploy', function(callback){
-  runSequence('run:nest:deploy:start', 'deploy:nest', 'run:git:tag', 'run:nest:deploy:end', callback);
+  runSequence('deploy:zip', 'run:nest:deploy:start', 'deploy:nest', 'run:git:tag', 'run:nest:deploy:end', 'deploy:clean', callback);
 });
 
 gulp.task('docs', ['styleguide', 'typedoc']);

@@ -99,7 +99,8 @@
     "gulp-json-format": "^1.0.0",
     "gulp-tar": "^1.9.0",
     "gulp-gzip": "^1.4.0",
-    "gulp-scp2": "^0.2.0"
+    "gulp-scp2": "^0.2.0",
+    "@types/core-js": "^0.9.34"
   },
   "private": true,
   "angular-cli": {}

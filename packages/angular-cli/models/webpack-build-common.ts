@@ -4,7 +4,8 @@ import {BaseHrefWebpackPlugin} from '@angular-cli/base-href-webpack';
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const autoprefixer = require('autoprefixer');
+const postcssAssets = require('postcss-assets');
 
 export function getWebpackCommonConfig(
   projectRoot: string,
@@ -98,7 +99,9 @@ export function getWebpackCommonConfig(
 
         { test: /\.(otf|woff|ttf|svg)$/, loader: 'url?limit=10000' },
         { test: /\.woff2$/, loader: 'url?limit=10000&mimetype=font/woff2' },
-        { test: /\.eot$/, loader: 'file' }
+        { test: /\.eot$/, loader: 'file' },
+
+        { test: /\.(jade|pug)$/, loaders: ['pug-html-loader?doctype=html']}
       ]
     },
     plugins: [
@@ -132,7 +135,16 @@ export function getWebpackCommonConfig(
         from: { glob: '**/*', dot: true },
         ignore: [ '.gitkeep' ],
         to: path.resolve(projectRoot, appConfig.outDir, appConfig.assets)
-      }])
+      }]),
+      new webpack.LoaderOptionsPlugin({
+        // test: /\.xxx$/, // may apply this only for some modules
+        options: {
+          postcss: function () {
+            return [autoprefixer, postcssAssets];
+          }
+        }
+      })
+
     ],
     node: {
       fs: 'empty',

@@ -15,7 +15,7 @@
     "noImplicitReturns": false,
     "noImplicitUseStrict": false,
     "noFallthroughCasesInSwitch": true,
-    "noResolve": true,
+    "noResolve": false,
     "typeRoots": [
       "../node_modules/@types"
     ],
