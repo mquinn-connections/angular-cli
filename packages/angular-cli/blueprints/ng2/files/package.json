@@ -1,16 +1,33 @@
 {
-  "name": "<%= htmlComponentName %>",
+  "name": "@ce/<%= htmlComponentName %>",
   "version": "0.0.0",
-  "license": "MIT",
-  "angular-cli": {},
+  "description": "Description for <%= htmlComponentName %>",
+  "keywords": [
+    "<%= htmlComponentName %>"
+  ],
+  "homepage": "http://somewhere.com",
+  "bugs": "http://somewhere.com",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Author Name",
+    "email": "you@somewhere.com",
+    "url": "http://somewhere.com"
+  },
+  "contributors": [
+    "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)"
+  ],
+  "main": "main.ts",
+  "repository": {
+    "type": "git",
+    "url": "http://host4:port/path/to/repo.git"
+  },
   "scripts": {
-    "start": "gulp && ng serve",
+    "start": "ng serve",
     "lint": "tslint \"<%= sourceDir %>/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor"
   },
-  "private": true,
   "dependencies": {
     "@angular/common": "2.0.0",
     "@angular/compiler": "2.0.0",
@@ -20,7 +37,6 @@
     "@angular/platform-browser": "2.0.0",
     "@angular/platform-browser-dynamic": "2.0.0",
     "@angular/router": "3.0.0",
-    "core-js": "^2.4.1",
     "rxjs": "5.0.0-beta.12",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.6.23"
@@ -54,7 +70,6 @@
     "gulp-pug": "^3.0.4",
     "gulp-less": "^3.0.5",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-cached": "^1.1.0",
     "gulp-postcss": "^6.2.0",
     "gulp-shell": "^0.5.1",
     "gulp-replace": "^0.5.4",
@@ -70,6 +85,23 @@
     "gulp-typedoc": "^1.2.1",
     "jasmine-reporters": "^2.1.1",
     "jasmine-spec-reporter": "^2.5.0",
-    "protractor-jasmine2-html-reporter": "0.0.6"
-  }
+    "protractor-jasmine2-html-reporter": "0.0.6",
+    "gulp-bump": "^2.2.0",
+    "gulp-zip": "^3.2.0",
+    "gulp-git": "^1.7.2",
+    "gulp-typescript": "3.0.1",
+    "merge2": "^1.0.2",
+    "core-js": "^2.4.1",
+    "gulp-rollup": "^2.5.1",
+    "gulp-uglify": "^2.0.0",
+    "gulp-inline-ng2-template": "^3.0.1",
+    "gulp-json-transform": "^0.4.2",
+    "gulp-json-format": "^1.0.0",
+    "gulp-tar": "^1.9.0",
+    "gulp-gzip": "^1.4.0",
+    "gulp-scp2": "^0.2.0",
+    "@types/core-js": "^0.9.34"
+  },
+  "private": true,
+  "angular-cli": {}
 }

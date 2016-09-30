@@ -15,7 +15,7 @@ CE-Angular-CLI includes the following:
 - Styleguide Generation via SC5Styleguide
 - CSS Regression Testing via BackstopJS
 - Karma & Protractor Testing Reports via html, junit, and spec reporters
-- (ComingSoon) CE Versioning & Deployment Hooks
+- CE Versioning & Deployment Hooks
 
 This fork will be continuously updated with the latest Angular-CLI changes and when/if Angular-CLI implements 
 any of these features directly we will remove our implementations of said features.
@@ -215,6 +215,8 @@ ng test
 
 Tests will execute after a build is executed via [Karma](http://karma-runner.github.io/0.13/index.html), and it will automatically watch your files for changes. You can run tests a single time via `--watch=false`.
 
+CE Only: Test results will be output to `./dist/test_results/unit`
+
 ### Running end-to-end tests
 
 ```bash
@@ -224,6 +226,22 @@ ng e2e
 Before running the tests make sure you are serving the app via `ng serve`.
 
 End-to-end tests are run via [Protractor](https://angular.github.io/protractor/).
+
+CE Only: Test results will be output to `./dist/test_results/e2e`
+
+### Documentation generation
+
+Run `gulp docs` to generate the styleguide and the typedoc documentation. Both will be output to the  `./dist/docs` directory in their respective folders.
+
+### CSS Regression Testing
+
+Css regression testing is done by running BackstopJS against a set of reference images.
+
+First run `gulp backstop:generateRef` to generate reference images of your application.
+Before running the generation make sure you are serving the app via `ng serve`.
+
+Once your reference images have been generated you can run the regression tests by running `gulp backstop`.
+Before running the regression make sure you are serving the app via `ng serve`.
 
 ### Proxy To Backend
 Using the proxying support in webpack's dev server we can highjack certain urls and send them to a backend server.
@@ -350,7 +368,7 @@ export class AppComponent {
 }
 ```
 
-When generating a new project you can also define which extention you want for
+When generating a new project you can also define which extension you want for
 style files:
 
 ```bash
