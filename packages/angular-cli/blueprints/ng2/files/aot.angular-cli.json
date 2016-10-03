@@ -9,7 +9,7 @@
       "outDir": "../aot/",
       "assets": "assets",
       "index": "index.html",
-      "main": "aot.main.ts",
+      "main": "../aot.main.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.json",
       "prefix": "<%= prefix %>",
