@@ -34,12 +34,13 @@ var gulp            = require('gulp'),
 
 global.paths = {
   'all':    './src/**/*',
-  'app':    './src/app/',
-  'dist':   './dist',
-  'tmp':    './dist/aot-tmp',
   'ts':     './src/app/**/!(*spec).ts',
   'less':   './src/app/**/*.less',
   'pug':    './src/app/**/*.pug',
+  'dist':   './dist',
+  'lib':    './dist/lib',
+  'aot':    './dist/app/aot',
+  'jit':    './dist/app/jit',
   'docs':   './dist/docs/'
 };
 
@@ -124,25 +125,28 @@ gulp.task('backstop', shell.task(
  *    Build Tasks
  *************************************************************************/
 
-gulp.task('clean', function (done) {
-  del([global.paths.tmp]).then(function() {
-    done()
-  });
-});
-
 gulp.task('lib:clean', function (done) {
   del([
-    global.paths.dist + '/lib/src/**/*.html',
-    global.paths.dist + '/lib/src/**/*.css',
-    global.paths.dist + '/lib/src/**/*.css.map'
+    global.paths.lib + '/src/**/!(*.d).ts',
+    global.paths.lib + '/src/**/*.html',
+    global.paths.lib + '/src/**/*.css',
+    global.paths.lib + '/src/**/*.css.map',
+    global.paths.lib + '/src/node_modules',
+    global.paths.lib + '/src/**/*.ngfactory.ts',
+    global.paths.lib + '/src/**/*.tsconfig.json'
   ]).then(function() {
     done()
   });
 });
 
-gulp.task('copy:tmp:aot', function() {
+gulp.task('copy:app:lib', function() {
   return gulp.src(global.paths.all)
-    .pipe(gulp.dest(global.paths.tmp))
+    .pipe(gulp.dest(global.paths.lib + '/src'))
+});
+
+gulp.task('copy:tsconfig:aot', function() {
+  return gulp.src('./src/aot.tsconfig.json')
+    .pipe(gulp.dest(global.paths.lib + '/src/'));
 });
 
 gulp.task('copy:config:aot', function() {
@@ -157,17 +161,16 @@ gulp.task('copy:config:jit', function() {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('aot:ts:replace', function() {
-  return gulp.src(global.paths.tmp + '/**/!(*spec).ts')
+gulp.task('ngc:ts:replace', function() {
+  return gulp.src(global.paths.ts)
     .pipe(replace('.less', '.css'))
     .pipe(replace('.pug', '.html'))
-    .pipe(gulp.dest(global.paths.tmp));
-});
-
-gulp.task('typesRoot:replace', function() {
-  return gulp.src(global.paths.tmp + '/tsconfig.json')
-    .pipe(replace('../node_modules/', '../../node_modules/'))
-    .pipe(gulp.dest(global.paths.tmp));
+    .pipe(ng2Template({
+      base: '/dist/lib/src',
+      supportNonExistentFiles: false,
+      templateExtension: '.html'
+    }))
+    .pipe(gulp.dest(global.paths.lib + '/src/'));
 });
 
 var outputPath;
@@ -248,7 +251,7 @@ gulp.task('lib:bundle:umd:min', function() {
  *    NPM Publish
  *************************************************************************/
 
-gulp.task('publish:copy:tmp', function() {
+gulp.task('publish:copy', function() {
   return gulp.src([
     global.paths.dist + '/app/**',
     global.paths.dist + '/lib/**',
@@ -276,6 +279,7 @@ gulp.task('publish:createPackageJson', function() {
       data.main = 'lib/src/index.js';
       data.version = version;
       data.private = false;
+      data.typings = 'lib/src/index.d.ts';
       return data;
     }))
     .pipe(jsonFormat(4))
@@ -349,7 +353,7 @@ gulp.task('deploy:clean', function (done) {
  *************************************************************************/
 
 gulp.task('run:ngc', shell.task([
-  '"./node_modules/.bin/ngc" -p dist/aot-tmp/aot.tsconfig.json'
+  '"./node_modules/.bin/ngc" -p dist/lib/src/aot.tsconfig.json'
 ]));
 
 gulp.task('run:ng:aot', shell.task([
@@ -365,18 +369,23 @@ gulp.task('run:ng:jit', shell.task([
  *************************************************************************/
 
 gulp.task('aot', function(callback){
-  outputPath = global.paths.tmp + '/app/';
-  runSequence('copy:config:aot', 'copy:tmp:aot', 'aot:ts:replace', 'transpile:less', 'transpile:pug', 'run:ngc', 'typesRoot:replace', 'run:ng:aot', 'clean', callback);
+  outputPath = global.paths.dist + '/lib/src/';
+  runSequence('copy:config:aot', 'lib:aot', 'run:ng:aot',  'lib:clean', callback);
 });
 
 gulp.task('jit', function(callback){
-  outputPath = global.paths.tmp + '/app/';
+  outputPath = global.paths.dist + '/app/';
   runSequence('copy:config:jit', 'run:ng:jit', callback);
+});
+
+gulp.task('lib:aot', function(callback){
+  outputPath = global.paths.dist + '/lib/src/';
+  runSequence('copy:tsconfig:aot', 'transpile:less', 'transpile:pug', 'ngc:ts:replace', 'run:ngc', 'transpile:ts', callback);
 });
 
 gulp.task('lib', function(callback){
   outputPath = global.paths.dist + '/lib/src/';
-  runSequence('transpile:pug', 'transpile:less', 'transpile:ts', 'lib:clean', callback);
+  runSequence('copy:tsconfig:aot', 'transpile:less', 'transpile:pug', 'ngc:ts:replace', 'run:ngc', 'transpile:ts', 'lib:clean', callback);
 });
 
 gulp.task('libs', function(callback){
@@ -384,7 +393,7 @@ gulp.task('libs', function(callback){
 });
 
 gulp.task('publish', function(callback){
-  runSequence('publish:createPackageJson', 'publish:copy:tmp', 'publish:tarball', 'publish:npm', 'publish:clean', callback);
+  runSequence('publish:createPackageJson', 'publish:copy', 'publish:tarball', 'publish:npm', 'publish:clean', callback);
 });
 
 gulp.task('deploy', function(callback){
@@ -394,5 +403,5 @@ gulp.task('deploy', function(callback){
 gulp.task('docs', ['styleguide', 'typedoc']);
 
 gulp.task('default', function(callback) {
-  runSequence('libs', 'aot', 'jit', 'docs', callback);
+  runSequence('jit', 'aot', 'libs', 'docs', callback);
 });

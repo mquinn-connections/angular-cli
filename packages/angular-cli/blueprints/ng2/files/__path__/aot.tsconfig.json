@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es5",
     "module": "es2015",
+    "lib": ["es6", "dom"],
     "moduleResolution": "node",
-    "declaration": false,
+    "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -16,7 +17,7 @@
     "noImplicitUseStrict": false,
     "noFallthroughCasesInSwitch": true,
     "typeRoots": [
-      "../node_modules/@types"
+      "../../../node_modules/@types"
     ],
     "types": [
       "node"
@@ -28,7 +29,7 @@
   },
   "compileOnSave": false,
   "files": [
-    "./app/app.module.ts"
+    "app.module.ts"
   ],
   "exclude": [
     "node_modules",
