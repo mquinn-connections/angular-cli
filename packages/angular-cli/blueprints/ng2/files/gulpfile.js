@@ -30,7 +30,8 @@ var gulp            = require('gulp'),
     jsonFormat      = require('gulp-json-format'),
     tar             = require('gulp-tar'),
     gzip            = require('gulp-gzip'),
-    scp             = require('gulp-scp2');
+    scp             = require('gulp-scp2'),
+    path            = require('path');
 
 global.paths = {
   'all':    './src/**/*',
@@ -41,7 +42,8 @@ global.paths = {
   'lib':    './dist/lib',
   'aot':    './dist/app/aot',
   'jit':    './dist/app/jit',
-  'docs':   './dist/docs/'
+  'docs':   './dist/docs/',
+  'root':   path.resolve(__dirname)
 };
 
 var styleguideOutputPath = global.paths.docs + 'styleguide/';
