@@ -166,9 +166,15 @@ gulp.task('ngc:ts:replace', function() {
     .pipe(replace('.less', '.css'))
     .pipe(replace('.pug', '.html'))
     .pipe(ng2Template({
-      base: '/dist/lib/src',
+      base: './dist/lib/src/app/',
       supportNonExistentFiles: false,
-      templateExtension: '.html'
+      templateExtension: '.html',
+      useRelativePaths: true,
+      customFilePath: function(ext, file) {
+        var customFilePath = file.replace(global.paths.root, global.paths.root + '/dist/lib');
+        customFilePath = customFilePath.replace('\\app\\', '\\');
+        return customFilePath;
+      }
     }))
     .pipe(gulp.dest(global.paths.lib + '/src/'));
 });
@@ -190,7 +196,7 @@ gulp.task('transpile:less', function(){
 
 gulp.task('transpile:pug', function(){
   return gulp.src(global.paths.pug)
-    .pipe(pug())
+    .pipe(pug({doctype: 'html'}))
     .pipe(gulp.dest(outputPath));
 });
 
@@ -201,9 +207,15 @@ gulp.task('transpile:ts', function(){
     .pipe(replace('.less', '.css'))
     .pipe(replace('.pug', '.html'))
     .pipe(ng2Template({
-      base: '/dist/lib/src',
+      base: './dist/lib/src/app/',
       supportNonExistentFiles: false,
-      templateExtension: '.html'
+      templateExtension: '.html',
+      useRelativePaths: true,
+      customFilePath: function(ext, file) {
+        var customFilePath = file.replace(global.paths.root, global.paths.root + '/dist/lib');
+        customFilePath = customFilePath.replace('\\app\\', '\\');
+        return customFilePath;
+      }
     }))
     .pipe(sourcemaps.init())
     .pipe(tsProject());
