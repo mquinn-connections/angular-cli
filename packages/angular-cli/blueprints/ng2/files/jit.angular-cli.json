@@ -12,10 +12,10 @@
       "main": "main.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.json",
-      "prefix": "<%= prefix %>",
+      "prefix": "ce",
       "mobile": <%= isMobile %>,
       "styles": [
-        "styles.<%= styleExt %>"
+        "./app/shared/styles.less"
       ],
       "scripts": [],
       "environments": {
@@ -38,7 +38,7 @@
     }
   },
   "defaults": {
-    "styleExt": "<%= styleExt %>",
+    "styleExt": "less",
     "prefixInterfaces": false
   }
 }

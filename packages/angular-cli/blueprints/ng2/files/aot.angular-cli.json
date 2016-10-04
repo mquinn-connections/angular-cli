@@ -5,17 +5,17 @@
   },
   "apps": [
     {
-      "root": "dist/aot-tmp/",
+      "root": "dist/lib/src/",
       "outDir": "../aot/",
       "assets": "assets",
-      "index": "index.html",
-      "main": "../aot.main.ts",
+      "index": "../../../src/index.html",
+      "main": "../../../src/aot.main.ts",
       "test": "test.ts",
-      "tsconfig": "tsconfig.json",
-      "prefix": "<%= prefix %>",
+      "tsconfig": "aot.tsconfig.json",
+      "prefix": "ce",
       "mobile": <%= isMobile %>,
       "styles": [
-        "styles.<%= styleExt %>"
+        "./shared/styles.css"
       ],
       "scripts": [],
       "environments": {
@@ -38,7 +38,7 @@
     }
   },
   "defaults": {
-    "styleExt": "<%= styleExt %>",
+    "styleExt": "css",
     "prefixInterfaces": false
   }
 }

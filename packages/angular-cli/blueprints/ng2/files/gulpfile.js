@@ -127,6 +127,7 @@ gulp.task('backstop', shell.task(
 
 gulp.task('lib:clean', function (done) {
   del([
+    global.paths.lib + '/src/**/!(*.d).ts',
     global.paths.lib + '/src/**/*.html',
     global.paths.lib + '/src/**/*.css',
     global.paths.lib + '/src/**/*.css.map',
@@ -164,13 +165,12 @@ gulp.task('ngc:ts:replace', function() {
   return gulp.src(global.paths.ts)
     .pipe(replace('.less', '.css'))
     .pipe(replace('.pug', '.html'))
+    .pipe(ng2Template({
+      base: '/dist/lib/src',
+      supportNonExistentFiles: false,
+      templateExtension: '.html'
+    }))
     .pipe(gulp.dest(global.paths.lib + '/src/'));
-});
-
-gulp.task('typesRoot:replace', function() {
-  return gulp.src(global.paths.lib + '/tsconfig.json')
-    .pipe(replace('../node_modules/', '../../node_modules/'))
-    .pipe(gulp.dest(global.paths.lib));
 });
 
 var outputPath;
@@ -276,7 +276,7 @@ gulp.task('publish:createPackageJson', function() {
       delete data.scripts;
       delete data.devDependencies;
       delete data["angular-cli"];
-      data.main = 'lib/bundles/ce-<%= htmlComponentName %>.bundle.umd.js';
+      data.main = 'lib/src/index.js';
       data.version = version;
       data.private = false;
       data.typings = 'lib/src/index.d.ts';
@@ -370,7 +370,7 @@ gulp.task('run:ng:jit', shell.task([
 
 gulp.task('aot', function(callback){
   outputPath = global.paths.dist + '/lib/src/';
-  runSequence('lib', 'copy:config:aot', 'run:ng:aot', callback);
+  runSequence('copy:config:aot', 'lib:aot', 'run:ng:aot',  'lib:clean', callback);
 });
 
 gulp.task('jit', function(callback){
@@ -378,9 +378,14 @@ gulp.task('jit', function(callback){
   runSequence('copy:config:jit', 'run:ng:jit', callback);
 });
 
+gulp.task('lib:aot', function(callback){
+  outputPath = global.paths.dist + '/lib/src/';
+  runSequence('copy:tsconfig:aot', 'transpile:less', 'transpile:pug', 'ngc:ts:replace', 'run:ngc', 'transpile:ts', callback);
+});
+
 gulp.task('lib', function(callback){
   outputPath = global.paths.dist + '/lib/src/';
-  runSequence('copy:tsconfig:aot', 'ngc:ts:replace', 'transpile:less', 'transpile:pug', 'run:ngc', 'transpile:ts', 'lib:clean', callback);
+  runSequence('copy:tsconfig:aot', 'transpile:less', 'transpile:pug', 'ngc:ts:replace', 'run:ngc', 'transpile:ts', 'lib:clean', callback);
 });
 
 gulp.task('libs', function(callback){
