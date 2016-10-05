@@ -1,37 +1,37 @@
 'use strict';
 
 var gulp            = require('gulp'),
-    less            = require('gulp-less'),
-    pug             = require('gulp-pug'),
-    sourcemaps      = require('gulp-sourcemaps'),
-    postcss         = require('gulp-postcss'),
-    autoprefixer    = require('autoprefixer'),
-    assets          = require('postcss-assets'),
-    shell           = require('gulp-shell'),
-    replace         = require('gulp-replace'),
-    runSequence     = require('run-sequence'),
-    del             = require('del'),
-    argv            = require('yargs').argv,
-    rename          = require('gulp-rename'),
-    styleguide      = require('sc5-styleguide'),
-    typedoc         = require("gulp-typedoc"),
-    bump            = require('gulp-bump'),
-    zip             = require('gulp-zip'),
-    fs              = require('fs'),
-    json            = JSON.parse(fs.readFileSync('./package.json')),
-    git             = require('gulp-git'),
-    typescript      = require('gulp-typescript'),
-    tsProject       = typescript.createProject('./src/lib.tsconfig.json'),
-    merge           = require('merge2'),
-    rollup          = require('gulp-rollup'),
-    uglify          = require('gulp-uglify'),
-    ng2Template     = require('gulp-inline-ng2-template'),
-    jsonTransform   = require('gulp-json-transform'),
-    jsonFormat      = require('gulp-json-format'),
-    tar             = require('gulp-tar'),
-    gzip            = require('gulp-gzip'),
-    scp             = require('gulp-scp2'),
-    path            = require('path');
+  less            = require('gulp-less'),
+  pug             = require('gulp-pug'),
+  sourcemaps      = require('gulp-sourcemaps'),
+  postcss         = require('gulp-postcss'),
+  autoprefixer    = require('autoprefixer'),
+  assets          = require('postcss-assets'),
+  shell           = require('gulp-shell'),
+  replace         = require('gulp-replace'),
+  runSequence     = require('run-sequence'),
+  del             = require('del'),
+  argv            = require('yargs').argv,
+  rename          = require('gulp-rename'),
+  styleguide      = require('sc5-styleguide'),
+  typedoc         = require("gulp-typedoc"),
+  bump            = require('gulp-bump'),
+  zip             = require('gulp-zip'),
+  fs              = require('fs'),
+  json            = JSON.parse(fs.readFileSync('./package.json')),
+  git             = require('gulp-git'),
+  typescript      = require('gulp-typescript'),
+  tsProject       = typescript.createProject('./src/lib.tsconfig.json'),
+  merge           = require('merge2'),
+  rollup          = require('gulp-rollup'),
+  uglify          = require('gulp-uglify'),
+  ng2Template     = require('gulp-inline-ng2-template'),
+  jsonTransform   = require('gulp-json-transform'),
+  jsonFormat      = require('gulp-json-format'),
+  tar             = require('gulp-tar'),
+  gzip            = require('gulp-gzip'),
+  scp             = require('gulp-scp2'),
+  path            = require('path');
 
 global.paths = {
   'all':    './src/**/*',
@@ -174,7 +174,7 @@ gulp.task('ngc:ts:replace', function() {
       useRelativePaths: true,
       customFilePath: function(ext, file) {
         var customFilePath = file.replace(global.paths.root, global.paths.root + '/dist/lib');
-        customFilePath = customFilePath.replace('\\app\\', '\\');
+        customFilePath = customFilePath.replace(path.sep + 'app' + path.sep, path.sep);
         return customFilePath;
       }
     }))
@@ -215,7 +215,7 @@ gulp.task('transpile:ts', function(){
       useRelativePaths: true,
       customFilePath: function(ext, file) {
         var customFilePath = file.replace(global.paths.root, global.paths.root + '/dist/lib');
-        customFilePath = customFilePath.replace('\\app\\', '\\');
+        customFilePath = customFilePath.replace(path.sep + 'app' + path.sep, path.sep);
         return customFilePath;
       }
     }))
