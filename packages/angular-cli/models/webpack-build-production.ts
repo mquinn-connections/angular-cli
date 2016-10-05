@@ -3,6 +3,9 @@ const WebpackMd5Hash = require('webpack-md5-hash');
 const CompressionPlugin = require('compression-webpack-plugin');
 import * as webpack from 'webpack';
 
+const autoprefixer = require('autoprefixer');
+const postcssAssets = require('postcss-assets');
+
 export const getWebpackProdConfigPartial = function(projectRoot: string, appConfig: any) {
   return {
     devtool: 'source-map',
@@ -42,6 +45,9 @@ export const getWebpackProdConfigPartial = function(projectRoot: string, appConf
               [/\[?\(?/, /(?:)/]
             ],
             customAttrAssign: [/\)?\]?=/]
+          },
+          postcss: function () {
+            return [autoprefixer, postcssAssets()];
           }
         }
       })

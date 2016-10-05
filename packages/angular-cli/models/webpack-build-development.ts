@@ -2,6 +2,9 @@ const path = require('path');
 
 import * as webpack from 'webpack';
 
+const autoprefixer = require('autoprefixer');
+const postcssAssets = require('postcss-assets');
+
 declare module 'webpack' {
     export interface LoaderOptionsPlugin {}
     export interface LoaderOptionsPluginStatic {
@@ -29,6 +32,9 @@ export const getWebpackDevConfigPartial = function(projectRoot: string, appConfi
             failOnHint: false,
             resourcePath: path.resolve(projectRoot, appConfig.root)
           },
+          postcss: function () {
+            return [autoprefixer, postcssAssets()];
+          }
         }
       })
     ],

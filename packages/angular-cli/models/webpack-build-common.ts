@@ -140,7 +140,7 @@ export function getWebpackCommonConfig(
         // test: /\.xxx$/, // may apply this only for some modules
         options: {
           postcss: function () {
-            return [autoprefixer, postcssAssets];
+            return [autoprefixer, postcssAssets()];
           }
         }
       })
