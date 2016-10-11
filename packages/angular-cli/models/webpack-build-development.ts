@@ -24,6 +24,12 @@ export const getWebpackDevConfigPartial = function(projectRoot: string, appConfi
       sourceMapFilename: '[name].map',
       chunkFilename: '[id].chunk.js'
     },
+    resolve: {
+      alias: {
+        'masonry': 'masonry-layout',
+        'isotope': 'isotope-layout'
+      }
+    },
     plugins: [
       new webpack.LoaderOptionsPlugin({
         options: {
