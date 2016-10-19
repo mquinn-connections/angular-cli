@@ -15,6 +15,12 @@ export const getWebpackProdConfigPartial = function(projectRoot: string, appConf
       sourceMapFilename: '[name].bundle.map',
       chunkFilename: '[id].[chunkhash].chunk.js'
     },
+    resolve: {
+      alias: {
+        'masonry': 'masonry-layout',
+        'isotope': 'isotope-layout'
+      }
+    },
     plugins: [
       new WebpackMd5Hash(),
       new webpack.optimize.UglifyJsPlugin(<any>{
